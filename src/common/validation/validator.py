@@ -26,6 +26,8 @@ class Validator:
         fail_safe = True
         self._errors = []
 
+        # TODO: refactor validators to support whitelisting.
+
         for rule in self._rules:
             if rule(self, obj) == False:
                 fail_safe = False
@@ -46,7 +48,7 @@ class Validator:
         #         )
 
         self.logger.warning("Validation error occurred, one or more validation errors occurred.",
-                            exceptions = self._errors,
+                            validation_errors=str(self._errors),
                             actor=self.app_context.logged_in_user.username.decode(),
                             action="Validating input")
 

@@ -26,6 +26,7 @@ class ResetUserPasswordAction(ActionInterface[User], metaclass=AutoWire):
             if (input.role.decode() != '1'):
                 self._logger.warning(f"A user tried to change the password of a user with more permissions {ROLE(2)}", action="Reset user password",
                                      username=self._app_context.logged_in_user.username.decode(), user_to_update=input.username.decode())
+                self._app_context.should_log = False
                 raise ValueError(
                     "You are not allowed to update the password of an user with more permissions then you. Activity logged")
 
@@ -38,4 +39,6 @@ class ResetUserPasswordAction(ActionInterface[User], metaclass=AutoWire):
         self._logger.info("Password succesfully updated", action="Reset user password",
                           actor=self._app_context.logged_in_user.username.decode(), deleted_user_username=input.username.decode())
 
+        if input.id == self._app_context.logged_in_user.id:
+            self._app_context.logged_in_user = None
         return page.options.get('1')

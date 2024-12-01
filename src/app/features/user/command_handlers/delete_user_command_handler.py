@@ -26,6 +26,7 @@ class DeleteUserCommandHandler(CommandHandler[DeleteUserCommand], metaclass=Auto
     def handle(self, command):
         if command.user.id == self._app_context.logged_in_user.id:
             self._logger.warning("A user tried to remove themselves", action="Delete user action",
-                                    username=self._app_context.logged_in_user.username.decode())
+                                 username=self._app_context.logged_in_user.username.decode())
+            self._app_context.should_log = False
             raise ValueError("You cannot delete yourself. Activity logged.")
         self._user_repository.delete_user(command.user)

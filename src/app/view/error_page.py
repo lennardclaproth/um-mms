@@ -4,15 +4,18 @@ from common.inter_act.components.text import Text
 from common.inter_act.components.textbox import TextBox
 from common.inter_act.engine import Engine
 from common.inter_act.page import Page
+from common.logging.logger import LoggerInterface
+from common.validation.validator import ValidationError
 
 
 class ErrorPage(Page, metaclass=AutoWire):
 
-    def __init__(self, engine: Engine, app_context: AppContext):
+    def __init__(self, engine: Engine, app_context: AppContext, logger: LoggerInterface):
         from app.view.main_menu import MainMenu
 
         self._app_context = app_context
         self._engine = engine
+        self._logger = logger
         super().__init__(engine=engine)
         self.options.update({
             "m": MainMenu
@@ -23,6 +26,7 @@ class ErrorPage(Page, metaclass=AutoWire):
 
     def render_body(self, size):
         error_string = str(self._app_context.error)
+        
         Text.get_component(error_string, size).refresh()
 
     def render_footer(self, size):

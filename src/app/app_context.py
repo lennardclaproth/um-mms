@@ -14,3 +14,4 @@ class AppContext():
     member_list: List[Member] = None
     selected_log: Log = None
     failed_login_attempts = 0
+    should_log = True

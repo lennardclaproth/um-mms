@@ -2,6 +2,7 @@ import re
 
 from common.validation.validator import NullByteValidationError, ValidationError, Validator
 
+# TODO: refactor so that the rules support whitelisting
 
 def ensure_str(input):
     if isinstance(input, bytes):
@@ -12,7 +13,7 @@ def ensure_str(input):
         raise ValueError("Input must be an instance of bytes or str")
 
 
-def validate_phonenumber(param_name):
+def validate_phonenumber(param_name) -> callable:
     def rule(validator: Validator, obj):
         try:
             value = ensure_str(getattr(obj, param_name))

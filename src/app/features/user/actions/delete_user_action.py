@@ -24,6 +24,7 @@ class DeleteUserAction(ActionInterface[User], metaclass=AutoWire):
             if (input.role.decode() != '1'):
                 self._logger.warning(f"A user tried to remove a user with more permissions, expected role {ROLE(b'2')}", action="Delete user action",
                                      username=self._app_context.logged_in_user.username.decode(), user_role=ROLE(self._app_context.logged_in_user.role), user_to_delete=input.username.decode())
+                self._app_context.should_log = False
                 raise ValueError(
                     "You are not allowed to delete an user with more permissions then you. Activity logged.")
 

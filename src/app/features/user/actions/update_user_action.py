@@ -26,6 +26,7 @@ class UpdateUserAction(ActionInterface[User], metaclass=AutoWire):
             if (input.role.decode() != '1'):
                 self.logger.warning(f"A user tried to change data of a user with more permissions, should expect role {ROLE(b'2')}", action="Update user action",
                                     username=self._app_context.logged_in_user.username.decode(), user_to_update=input.username.decode(), role=ROLE(self._app_context.logged_in_user.role),)
+                self._app_context.should_log = False
                 raise ValueError(
                     "You cannot edit an user with the same or more permissions as you. Activity has been logged.")
 
@@ -33,6 +34,7 @@ class UpdateUserAction(ActionInterface[User], metaclass=AutoWire):
             if (input.role.decode() == '3'):
                 self.logger.warning(f"A user tried to change data of a user with more permissions, should expect role {ROLE(b'3')}", action="Update user action",
                                     username=self._app_context.logged_in_user.username.decode(), role=ROLE(self._app_context.logged_in_user.role), user_to_update=input.username.decode())
+                self._app_context.should_log = False
                 raise ValueError(
                     "You cannot edit an user with the same permissions as you. Activity has been logged.")
 

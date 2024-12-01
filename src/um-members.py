@@ -1,4 +1,5 @@
 from curses import wrapper
+from logging import Logger
 
 from app.app_context import AppContext
 from app.builder import Builder
@@ -9,6 +10,7 @@ from common.cryptography.password_manager import PasswordManager
 from common.dependency_injection.lifetimes import Lifetime
 from common.logging.logger import CustomLogger, LoggerInterface
 from common.smart_db.query_builder import QueryBuilder
+
 
 def main(stdscr):
     builder = Builder()
@@ -28,7 +30,6 @@ def main(stdscr):
                         PasswordManager, Lifetime.SINGLETON)
     builder.build_app()
     builder.app.start()
-
 
 if __name__ == "__main__":
 

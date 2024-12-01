@@ -1,5 +1,7 @@
 import curses
 
+from common.validation.rules import ensure_str
+
 
 class Input:
 

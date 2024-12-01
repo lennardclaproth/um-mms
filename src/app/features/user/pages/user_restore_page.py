@@ -35,6 +35,7 @@ class UserRestorePage(Page, metaclass=AutoWire):
 
     def perform_action(self):
         ImportService.restore(f"backup/{self.input_str.decode()}.zip")
+        self._app_context.logged_in_user = None
         return self.options.get('1')
 
     def render_footer(self, size):

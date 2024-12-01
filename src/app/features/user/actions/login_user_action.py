@@ -20,9 +20,10 @@ class LoginUserAction(ActionInterface[User], metaclass=AutoWire):
         self._logger = logger
 
     def act(self, input: User, page: PageInterface):
-        if (self._app_context.failed_login_attempts > 3):
+        if (self._app_context.failed_login_attempts >= 3):
             self._logger.warning(
                 "Too many login attempts", activity="User log in", attempted_username=input.username.decode())
+            self._app_context.should_log = False
             raise ValueError("Too many login attempts. Activity logged.")
         user = self._sender.send(LoginUserQuery(
             input.username, input.password))
@@ -30,6 +31,8 @@ class LoginUserAction(ActionInterface[User], metaclass=AutoWire):
             self._app_context.logged_in_user = user
             self._logger.info("User succesfully logged in.", activity="User log in",
                               suspicious="No", username=self._app_context.logged_in_user.username.decode())
+            self._app_context.should_log = False
             return page.options.get('1')
         self._app_context.failed_login_attempts += 1
+        self._app_context.should_log = False
         raise ValueError("Wrong username or password")
